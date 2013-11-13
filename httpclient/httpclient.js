@@ -29,7 +29,7 @@ function send (json){
     };
  
     var req = http.request(options, function(res) {
-      console.log('\nSTATUS: ' + res.statusCode);
+      //console.log('\nSTATUS: ' + res.statusCode);
       //console.log('HEADERS: ' + JSON.stringify(res.headers));
       res.setEncoding('utf8');
       res.on('data', function (chunk) {
@@ -46,7 +46,6 @@ function send (json){
     req.setHeader('content-type', 'application/json');
     // write data to request body
     
-    console.log("Sending" + JSON.stringify(json));
     req.write(JSON.stringify(json));
 
     req.end();
