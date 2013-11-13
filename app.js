@@ -4,9 +4,26 @@
 
 var http = require('http');
 var path = require('path');
-var httpclient = require('./httpclient/httpclient.js');
+var httpClient = require('./httpclient/httpclient.js');
+
+/**
+ *
+ * Change here if you use custom value for the HomeAgainApi
+ *
+ */
+httpClient.init({
+	hostname: '127.0.0.1',
+    port: 4000
+});
+// Simulators
+var TemperatureSimulator = require('./simulators/temperature_simulator.js');
+var DoorSimulator = require('./simulators/door_simulator.js');
+var MoistureSimulator = require('./simulators/moisture_simulator.js');
+
 
 var DEBUG = true;
+
+
 
 if (DEBUG) {
 	var fakeSerialPort = require('./fake_serial/fake_serial.js');
@@ -14,13 +31,20 @@ if (DEBUG) {
 
 	fakeSerialPort.init({
 		simulators: [
-			"../simulators/temperature_1_simulator.js",
-			"../simulators/temperature_2_simulator.js",
-			"../simulators/temperature_3_simulator.js",
-			"../simulators/temperature_4_simulator.js",
-			"../simulators/temperature_5_simulator.js",
-			"../simulators/door_1_simulator.js",
-			"../simulators/door_2_simulator.js"
+			TemperatureSimulator("TEMP_1"),
+			TemperatureSimulator("TEMP_2"),
+			TemperatureSimulator("TEMP_3"),
+			TemperatureSimulator("TEMP_4"),
+			TemperatureSimulator("TEMP_5"),
+
+			DoorSimulator("DOOR_1"),
+			DoorSimulator("DOOR_2"),
+			DoorSimulator("DOOR_3"),
+
+			MoistureSimulator("MOISTURE_1"),
+			MoistureSimulator("MOISTURE_2"),
+			MoistureSimulator("MOISTURE_3"),
+
 		],
 		interval: 10000,
 	});
@@ -37,8 +61,7 @@ if (DEBUG) {
 			unit: data[3],
 			timestamp : Date.now()
 		};
-		console.dir(jsonData);
-		httpclient.send(jsonData);
+		httpClient.send(jsonData);
 
 
 	});

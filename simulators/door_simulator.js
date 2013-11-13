@@ -1,18 +1,17 @@
 /*
- * Moisture simulator
+ * Door simulator
  *
  */
 module.exports =  function(sensor_id){
     
     var simulator = {};
-
     simulator.id = sensor_id;
-    simulator.type = 'humidity';
-    simulator.unit = 'humidity.%perL';
+    simulator.type = 'door';
+    simulator.unit = 'door.opened';
     
     simulator.getValue = function(){
-            return Math.round((60 + 5 * Math.random())*100)/100;
+        return Math.round(Math.random());
     };
     
     return simulator;
-};  
+};
