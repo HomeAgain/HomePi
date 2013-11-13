@@ -7,7 +7,7 @@ module.exports =  function(sensor_id){
     var simulator = {};
 
     simulator.id = sensor_id;
-    simulator.type = 'humidity';
+    simulator.type = 'moisture';
     simulator.unit = 'humidity.%perL';
     
     simulator.getValue = function(){
