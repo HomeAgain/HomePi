@@ -57,8 +57,8 @@ if (DEBUG) {
 		jsonData = {
 			sensor_id: data[0],
 			value: data[1],
-			model: data[2],
-			unit: data[3],
+			modelName: data[2],
+			unitName: data[3],
 			timestamp : Date.now()
 		};
 		httpClient.send(jsonData);

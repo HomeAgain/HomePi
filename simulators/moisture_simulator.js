@@ -8,7 +8,7 @@ module.exports =  function(sensor_id){
 
     simulator.id = sensor_id;
     simulator.type = 'moisture';
-    simulator.unit = 'humidity.%perL';
+    simulator.unit = 'perL';
     
     simulator.getValue = function(){
             return Math.round((60 + 5 * Math.random())*100)/100;
