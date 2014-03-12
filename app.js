@@ -18,6 +18,7 @@ httpClient.init({
 // Simulators
 var TemperatureSimulator = require('./simulators/temperature_simulator.js');
 var DoorSimulator = require('./simulators/door_simulator.js');
+var PresenceSimulator = require('./simulators/presence_simulator.js');
 var MoistureSimulator = require('./simulators/moisture_simulator.js');
 
 
@@ -34,8 +35,13 @@ if (DEBUG) {
 			TemperatureSimulator("TEMP_1"),
 			TemperatureSimulator("TEMP_2"),
 			TemperatureSimulator("TEMP_3"),
-			//TemperatureSimulator("TEMP_4"),
-			//TemperatureSimulator("TEMP_5"),
+			TemperatureSimulator("TEMP_4"),
+			TemperatureSimulator("TEMP_5"),
+            
+            PresenceSimulator("PRESENCE_1"),
+			PresenceSimulator("PRESENCE_2"),
+			PresenceSimulator("PRESENCE_3"),
+
 
 			DoorSimulator("DOOR_1"),
 			DoorSimulator("DOOR_2"),
