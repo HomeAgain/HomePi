@@ -22,7 +22,7 @@ var PresenceSimulator = require('./simulators/presence_simulator.js');
 var MoistureSimulator = require('./simulators/moisture_simulator.js');
 
 
-var DEBUG = false;
+var DEBUG = true;
 
 var hub_id = "HUB_1";
 
@@ -33,7 +33,7 @@ if (DEBUG) {
 	fakeSerialPort.init({
 		simulators: [
 			TemperatureSimulator("TEMP_1"),
-/*			TemperatureSimulator("TEMP_2"),
+			TemperatureSimulator("TEMP_2"),
 			TemperatureSimulator("TEMP_3"),
 			TemperatureSimulator("TEMP_4"),
 			TemperatureSimulator("TEMP_5"),
@@ -50,7 +50,6 @@ if (DEBUG) {
 			MoistureSimulator("MOISTURE_1"),
 			MoistureSimulator("MOISTURE_2"),
 			MoistureSimulator("MOISTURE_3"),
-*/
 		],
 		interval: 10000,
 	});
@@ -59,14 +58,14 @@ if (DEBUG) {
 		console.log("Received : " + data);
 		pattern = /DATA=(.*)=DATA/;
 		match = pattern.exec(data);
+
 		if(match){
 			data = match[1];
 		} else {
-			console.log("BAD DATA");
 			return;
 		}
 		data = data.split('=');
-		console.log(jsonData);
+		
 		jsonData = {
 			hub_id : hub_id,
 			sensor_id: data[0],
@@ -91,14 +90,14 @@ if (DEBUG) {
 		serialPort.on("data", function(data) {
 		console.log("Received : " + data);
 		pattern = /DATA=(.*)=DATA/;
-                match = pattern.exec(data);
-                if(match){
-                        data = match[1];
-                } else {
-			console.log(match);
-                        console.log("BAD DATA");
-                        return;
-                }
+        match = pattern.exec(data);
+		
+		if(match){
+			data = match[1];
+		} else {
+			return;
+        }
+		
 		data = data.split('=');
 
 		jsonData = {
@@ -109,7 +108,7 @@ if (DEBUG) {
 			unitName: data[1].split('.')[1],
 			created_on : Date.now()
 		};
-		console.log(jsonData);
+		
 		httpClient.send(jsonData);
 
 
