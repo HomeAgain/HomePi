@@ -12,8 +12,8 @@ var httpClient = require('./httpclient/httpclient.js');
  *
  */
 httpClient.init({
-	hostname: '127.0.0.1',
-    port: 4000
+	host: '192.168.4.1',
+	port: 4000
 });
 // Simulators
 var TemperatureSimulator = require('./simulators/temperature_simulator.js');
@@ -22,7 +22,7 @@ var PresenceSimulator = require('./simulators/presence_simulator.js');
 var MoistureSimulator = require('./simulators/moisture_simulator.js');
 
 
-var DEBUG = true;
+var DEBUG = false;
 
 var hub_id = "HUB_1";
 
@@ -33,7 +33,7 @@ if (DEBUG) {
 	fakeSerialPort.init({
 		simulators: [
 			TemperatureSimulator("TEMP_1"),
-			TemperatureSimulator("TEMP_2"),
+/*			TemperatureSimulator("TEMP_2"),
 			TemperatureSimulator("TEMP_3"),
 			TemperatureSimulator("TEMP_4"),
 			TemperatureSimulator("TEMP_5"),
@@ -50,16 +50,23 @@ if (DEBUG) {
 			MoistureSimulator("MOISTURE_1"),
 			MoistureSimulator("MOISTURE_2"),
 			MoistureSimulator("MOISTURE_3"),
-
+*/
 		],
 		interval: 10000,
 	});
 
 	fakeSerialPort.on("data", function(data) {
 		console.log("Received : " + data);
-
+		pattern = /DATA=(.*)=DATA/;
+		match = pattern.exec(data);
+		if(match){
+			data = match[1];
+		} else {
+			console.log("BAD DATA");
+			return;
+		}
 		data = data.split('=');
-
+		console.log(jsonData);
 		jsonData = {
 			hub_id : hub_id,
 			sensor_id: data[0],
@@ -75,7 +82,7 @@ if (DEBUG) {
 } else {
 	var serialport = require("serialport");
 	var SerialPort = serialport.SerialPort
-	var serialPort = new SerialPort("/dev/tty.usbmodem1411", {
+	var serialPort = new SerialPort("/dev/ttyACM0", {
   		baudrate: 9600,
   		parser: serialport.parsers.readline("\n")
 	});
@@ -83,17 +90,26 @@ if (DEBUG) {
 	serialPort.on("open", function(){
 		serialPort.on("data", function(data) {
 		console.log("Received : " + data);
-
+		pattern = /DATA=(.*)=DATA/;
+                match = pattern.exec(data);
+                if(match){
+                        data = match[1];
+                } else {
+			console.log(match);
+                        console.log("BAD DATA");
+                        return;
+                }
 		data = data.split('=');
 
 		jsonData = {
 			hub_id : hub_id,
 			sensor_id: data[0],
 			value: data[2],
-			model: data[1].split('.')[0],
-			unit: data[1],
+			modelName: data[1].split('.')[0],
+			unitName: data[1].split('.')[1],
 			created_on : Date.now()
 		};
+		console.log(jsonData);
 		httpClient.send(jsonData);
 
 
